@@ -1,4 +1,6 @@
-# dockerfile-rundeck
+[![Circle CI](https://circleci.com/gh/IntimateMerger/dockerfile-rundeck/tree/master.svg?style=svg)](https://circleci.com/gh/IntimateMerger/dockerfile-rundeck/tree/master)
+
+# Rundeck Dockerfile
 Dockerfile for [Rundeck](http://rundeck.org/) on AWS
 
 ## How to use this image
@@ -29,6 +31,8 @@ RUNDECK_S3_BUCKET:
 RUNDECK_S3_REGION: ap-northeast-1
 ```
 
+### Example
+
 ```bash
 $ docker run -d -p 4440:4440 \
     -e "RUNDECK_URL=https://rundeck.example.com" \
@@ -45,17 +49,17 @@ Example docker-compose.yml for rundeck:
 rundeck:
   image: intimatemerger/rundeck
   links:
-    - db:rundeck_db
+    - db:db_host
   ports:
     - 4440:4440
   environment:
     RUNDECK_URL: http://localhost:4440
-    RUNDECK_MYSQL_HOST: rundeck_db
+    RUNDECK_MYSQL_HOST: db_host
 
 db:
   image: mariadb
   environment:
-    MYSQL_ROOT_PASSWORD: example
+    MYSQL_ROOT_PASSWORD: root
     MYSQL_DATABASE: rundeck
     MYSQL_USER: rundeck
     MYSQL_PASSWORD: rundeck

@@ -1,0 +1,17 @@
+machine:
+  services:
+    - docker
+
+dependencies:
+  override:
+    - docker info
+    - docker build -t rundeck .
+
+database:
+  override:
+    - docker run -d --name mariadb --env="MYSQL_ROOT_PASSWORD=root" --env="MYSQL_DATABASE=rundeck" --env="MYSQL_USER=rundeck" --env="MYSQL_PASSWORD=rundeck" mariadb; sleep 5
+
+test:
+  override:
+    - docker run -d --name rundeck -p 4440:4440 --link mariadb:db_host --env="RUNDECK_URL=localhost:4440" --env="RUNDECK_MYSQL_HOST=db_host" rundeck; sleep 60
+    - curl --retry 10 --retry-delay 5 -v http://localhost:4440/user/login
