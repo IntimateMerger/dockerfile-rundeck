@@ -4,7 +4,7 @@ RUN apt-get update \
     && apt-get install -y uuid-runtime
 
 # install rundeck
-ENV RUNDECK_VERSION=2.6.3-1-GA
+ENV RUNDECK_VERSION=2.6.4-1-GA
 RUN wget "http://dl.bintray.com/rundeck/rundeck-deb/rundeck-${RUNDECK_VERSION}.deb" &&\
     dpkg -i rundeck-${RUNDECK_VERSION}.deb &&\
     rm -f rundeck-${RUNDECK_VERSION}.deb &&\
