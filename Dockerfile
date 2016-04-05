@@ -1,7 +1,7 @@
 FROM java:8
 
 RUN apt-get update \
-    && apt-get install -y uuid-runtime
+    && apt-get install -y uuid-runtime mysql-client
 
 # install rundeck
 ENV RUNDECK_VERSION=2.6.4-1-GA
