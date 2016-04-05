@@ -23,6 +23,14 @@ RUN wget "https://github.com/rundeck-plugins/rundeck-ec2-nodes-plugin/releases/d
     wget "https://github.com/rundeck-plugins/rundeck-s3-log-plugin/releases/download/v1.0.0/rundeck-s3-log-plugin-1.0.0.jar" &&\
     wget "https://github.com/higanworks/rundeck-slack-incoming-webhook-plugin/releases/download/v0.5.dev/rundeck-slack-incoming-webhook-plugin-0.5.jar"
 
+# install vagrant
+ENV VAGRANT_VERSION=1.8.1
+RUN wget "https://releases.hashicorp.com/vagrant/${VAGRANT_VERSION}/vagrant_${VAGRANT_VERSION}_x86_64.deb" &&\
+    dpkg -i vagrant_${VAGRANT_VERSION}_x86_64.deb &&\
+    rm -f vagrant_${VAGRANT_VERSION}_x86_64.deb &&\
+    vagrant plugin install vagrant-aws &&\
+    vagrant box add dummy "https://github.com/mitchellh/vagrant-aws/raw/master/dummy.box"
+
 WORKDIR /var/lib/rundeck
 
 COPY profile.sh /etc/rundeck/profile
