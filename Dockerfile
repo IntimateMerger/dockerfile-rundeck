@@ -4,7 +4,7 @@ RUN apt-get update \
     && apt-get install -y uuid-runtime mysql-client
 
 # install rundeck
-ENV RUNDECK_VERSION=2.6.4-1-GA
+ENV RUNDECK_VERSION=2.6.6-1-GA
 RUN wget "http://dl.bintray.com/rundeck/rundeck-deb/rundeck-${RUNDECK_VERSION}.deb" &&\
     dpkg -i rundeck-${RUNDECK_VERSION}.deb &&\
     rm -f rundeck-${RUNDECK_VERSION}.deb &&\
@@ -20,7 +20,7 @@ RUN wget "http://dl.bintray.com/rundeck/rundeck-deb/rundeck-${RUNDECK_VERSION}.d
 # install rundeck plugins
 WORKDIR /var/lib/rundeck/libext
 RUN wget "https://github.com/rundeck-plugins/rundeck-ec2-nodes-plugin/releases/download/v1.5.2/rundeck-ec2-nodes-plugin-1.5.2.jar" &&\
-    wget "https://github.com/rundeck-plugins/rundeck-s3-log-plugin/releases/download/v1.0.0/rundeck-s3-log-plugin-1.0.0.jar" &&\
+    wget "https://github.com/rundeck-plugins/rundeck-s3-log-plugin/releases/download/v1.0.1/rundeck-s3-log-plugin-1.0.1.jar" &&\
     wget "https://github.com/higanworks/rundeck-slack-incoming-webhook-plugin/releases/download/v0.5.dev/rundeck-slack-incoming-webhook-plugin-0.5.jar"
 
 # install vagrant
