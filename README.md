@@ -9,27 +9,20 @@ Dockerfile for [Rundeck](http://rundeck.org/) on AWS
 
 If you don't set the env, Rundeck use the default env.
 
-```yml
-TZ: Asia/Tokyo
-
-RUNDECK_PORT: 4440
-RUNDECK_URL:
-
-# MySQL
-RUNDECK_MYSQL_HOST:
-RUNDECK_MYSQL_DATABASE: rundeck
-RUNDECK_MYSQL_USERNAME: rundeck
-RUNDECK_MYSQL_PASSWORD: rundeck
-
-# Rundeck EC2 Nodes Plugin
-AWS_ACCESS_KEY_ID:
-AWS_SECRET_ACCESS_KEY:
-
-# Rundeck S3 Log Storage Plugin
-AWS_SECRET_KEY:
-RUNDECK_S3_BUCKET:
-RUNDECK_S3_REGION: ap-northeast-1
-```
+| name | default | description |
+| --- | --- | --- |
+| TZ | Asia/Tokyo | Timezone |
+| RUNDECK_PORT | 4440 | Listen Port |
+| RUNDECK_URL |  | exp) https://rundeck.example.com |
+| RUNDECK_MYSQL_HOST |  | exp) rundeck.xxxxxxxxxxxxx.ap-northeast-1.rds.amazonaws.com |
+| RUNDECK_MYSQL_DATABASE | rundeck |  |
+| RUNDECK_MYSQL_USERNAME | rundeck |  |
+| RUNDECK_MYSQL_PASSWORD | rundeck |  |
+| AWS_ACCESS_KEY_ID |  | for rundeck-ec2-nodes-plugin |
+| AWS_SECRET_ACCESS_KEY |  | for rundeck-ec2-nodes-plugin |
+| AWS_SECRET_KEY |  | for rundeck-s3-log-plugin |
+| RUNDECK_S3_BUCKET |  | for rundeck-s3-log-plugin |
+| RUNDECK_S3_REGION | ap-northeast-1 | for rundeck-s3-log-plugin |
 
 ### Example
 
