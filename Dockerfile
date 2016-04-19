@@ -41,7 +41,7 @@ ENV TZ=Asia/Tokyo \
     RUNDECK_MYSQL_USERNAME=rundeck \
     RUNDECK_MYSQL_PASSWORD=rundeck \
     RUNDECK_S3_REGION=ap-northeast-1 \
-    RUNDECK_CLUSTER_MODE = false
+    RUNDECK_CLUSTER_MODE=false
 
 CMD . /etc/rundeck/profile &&\
     java ${RDECK_JVM} -cp ${BOOTSTRAP_CP} com.dtolabs.rundeck.RunServer /var/lib/rundeck ${RUNDECK_PORT}
