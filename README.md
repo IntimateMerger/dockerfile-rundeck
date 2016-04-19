@@ -23,6 +23,7 @@ If you don't set the env, Rundeck use the default env.
 | AWS_SECRET_KEY |  | for rundeck-s3-log-plugin |
 | RUNDECK_S3_BUCKET |  | for rundeck-s3-log-plugin |
 | RUNDECK_S3_REGION | ap-northeast-1 | for rundeck-s3-log-plugin |
+| RUNDECK_CLUSTER_MODE | false | Cluster Mode Flag |
 
 ### Example
 

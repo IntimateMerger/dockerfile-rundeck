@@ -16,7 +16,7 @@ sed -i -e "/^grails.serverURL/c\grails.serverURL=${RUNDECK_URL}" /etc/rundeck/ru
 
 # Enable Cluster Mode
 echo "rundeck.server.uuid = $(uuidgen)" >> /etc/rundeck/framework.properties
-echo "rundeck.clusterMode.enabled = true" >> /etc/rundeck/rundeck-config.properties
+echo "rundeck.clusterMode.enabled = ${RUNDECK_CLUSTER_MODE}" >> /etc/rundeck/rundeck-config.properties
 
 # Use MySQL
 sed -i -e "/^dataSource.url/c\dataSource.url = jdbc:mysql://${RUNDECK_MYSQL_HOST}/${RUNDECK_MYSQL_DATABASE}?autoReconnect=true" /etc/rundeck/rundeck-config.properties
