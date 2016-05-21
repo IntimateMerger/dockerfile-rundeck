@@ -4,7 +4,7 @@ RUN apt-get update \
     && apt-get install -y uuid-runtime mysql-client
 
 # install rundeck
-ENV RUNDECK_VERSION=2.6.6-1-GA
+ENV RUNDECK_VERSION=2.6.7-1-GA
 RUN wget "http://dl.bintray.com/rundeck/rundeck-deb/rundeck-${RUNDECK_VERSION}.deb" &&\
     dpkg -i rundeck-${RUNDECK_VERSION}.deb &&\
     rm -f rundeck-${RUNDECK_VERSION}.deb &&\
@@ -30,6 +30,12 @@ RUN wget "https://releases.hashicorp.com/vagrant/${VAGRANT_VERSION}/vagrant_${VA
     rm -f vagrant_${VAGRANT_VERSION}_x86_64.deb &&\
     vagrant plugin install vagrant-aws &&\
     vagrant box add dummy "https://github.com/mitchellh/vagrant-aws/raw/master/dummy.box"
+
+# install aws-cli
+RUN wget "https://s3.amazonaws.com/aws-cli/awscli-bundle.zip" &&\
+    unzip awscli-bundle.zip &&\
+    ./awscli-bundle/install -i /opt/aws -b /usr/bin/aws &&\
+    rm -rf awscli-bundle.zip awscli-bundle
 
 WORKDIR /var/lib/rundeck
 

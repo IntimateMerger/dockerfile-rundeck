@@ -7,34 +7,41 @@ RUNDECK_TEMPDIR=/tmp/rundeck
 #RDECK_HTTP_PORT=4440
 #RDECK_HTTPS_PORT=4443
 
-# Change hostname & URL
-sed -i -e "/^framework.server.name/c\framework.server.name = ${HOSTNAME}" /etc/rundeck/framework.properties
-sed -i -e "/^framework.server.hostname/c\framework.server.hostname = ${HOSTNAME}" /etc/rundeck/framework.properties
-sed -i -e "/^framework.server.port/c\framework.server.port = ${RUNDECK_PORT}" /etc/rundeck/framework.properties
-sed -i -e "/^framework.server.url/c\framework.server.url = ${RUNDECK_URL}" /etc/rundeck/framework.properties
-sed -i -e "/^grails.serverURL/c\grails.serverURL=${RUNDECK_URL}" /etc/rundeck/rundeck-config.properties
+# framework.properties
+sed -i -e "/^framework.server.name/c\framework.server.name = $HOSTNAME" /etc/rundeck/framework.properties
+sed -i -e "/^framework.server.hostname/c\framework.server.hostname = $HOSTNAME" /etc/rundeck/framework.properties
+sed -i -e "/^framework.server.port/c\framework.server.port = $RUNDECK_PORT" /etc/rundeck/framework.properties
+sed -i -e "/^framework.server.url/c\framework.server.url = $RUNDECK_URL" /etc/rundeck/framework.properties
 
-# Enable Cluster Mode
-echo "rundeck.server.uuid = $(uuidgen)" >> /etc/rundeck/framework.properties
-echo "rundeck.clusterMode.enabled = ${RUNDECK_CLUSTER_MODE}" >> /etc/rundeck/rundeck-config.properties
+cat >> /etc/rundeck/framework.properties <<EOF;
+rundeck.server.uuid = $(uuidgen)
 
-# Use MySQL
-sed -i -e "/^dataSource.url/c\dataSource.url = jdbc:mysql://${RUNDECK_MYSQL_HOST}/${RUNDECK_MYSQL_DATABASE}?autoReconnect=true" /etc/rundeck/rundeck-config.properties
-echo "dataSource.username = ${RUNDECK_MYSQL_USERNAME}" >> /etc/rundeck/rundeck-config.properties
-echo "dataSource.password = ${RUNDECK_MYSQL_PASSWORD}" >> /etc/rundeck/rundeck-config.properties
+framework.plugin.ExecutionFileStorage.org.rundeck.amazon-s3.bucket = $RUNDECK_S3_BUCKET
+framework.plugin.ExecutionFileStorage.org.rundeck.amazon-s3.path = logs/\${job.project}/\${job.id}/\${job.execid}.log
+framework.plugin.ExecutionFileStorage.org.rundeck.amazon-s3.region = $RUNDECK_S3_REGION
+EOF
 
-# Enables DB for Project configuration storage
-echo "rundeck.projectsStorageType = db" >> /etc/rundeck/rundeck-config.properties
+# rundeck-config.properties
+sed -i -e "/^grails.serverURL/c\grails.serverURL=$RUNDECK_URL" /etc/rundeck/rundeck-config.properties
 
-# Enable DB for Key Storage
-echo "rundeck.storage.provider.1.type = db" >> /etc/rundeck/rundeck-config.properties
-echo "rundeck.storage.provider.1.path = keys" >> /etc/rundeck/rundeck-config.properties
+if [ -n "$RUNDECK_MYSQL_HOST" ]; then
+    sed -i -e "/^dataSource.url/c\dataSource.url = jdbc:mysql://$RUNDECK_MYSQL_HOST/$RUNDECK_MYSQL_DATABASE?autoReconnect=true" /etc/rundeck/rundeck-config.properties
+fi
 
-# Rundeck S3 Log Storage Plugin
-echo "framework.plugin.ExecutionFileStorage.org.rundeck.amazon-s3.bucket = ${RUNDECK_S3_BUCKET}" >> /etc/rundeck/framework.properties
-echo 'framework.plugin.ExecutionFileStorage.org.rundeck.amazon-s3.path = logs/${job.project}/${job.id}/${job.execid}.log' >> /etc/rundeck/framework.properties
-echo "framework.plugin.ExecutionFileStorage.org.rundeck.amazon-s3.region = ${RUNDECK_S3_REGION}" >> /etc/rundeck/framework.properties
-echo "rundeck.execution.logs.fileStoragePlugin = org.rundeck.amazon-s3" >> /etc/rundeck/rundeck-config.properties
+cat >> /etc/rundeck/rundeck-config.properties <<EOF;
+dataSource.username = $RUNDECK_MYSQL_USERNAME
+dataSource.password = $RUNDECK_MYSQL_PASSWORD
+
+rundeck.projectsStorageType = db
+
+rundeck.storage.provider.1.type = db
+rundeck.storage.provider.1.path = keys
+
+rundeck.execution.logs.fileStoragePlugin = org.rundeck.amazon-s3
+
+rundeck.clusterMode.enabled = $RUNDECK_CLUSTER_MODE
+EOF
+
 
 #
 # If JAVA_HOME is set, then add it to home and set JAVA_CMD to use the version specified in that
