@@ -1,39 +1,34 @@
 FROM java:8
 
-RUN apt-get update &&\
-    apt-get install -y uuid-runtime mysql-client python-pip &&\
+RUN apt-get update && \
+    apt-get install -y uuid-runtime mysql-client python python-pip && \
+    apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
 # install rundeck
-ENV RUNDECK_VERSION=2.6.8-1-GA
-RUN wget "http://dl.bintray.com/rundeck/rundeck-deb/rundeck-${RUNDECK_VERSION}.deb" &&\
-    dpkg -i rundeck-${RUNDECK_VERSION}.deb &&\
-    rm -f rundeck-${RUNDECK_VERSION}.deb &&\
-    ln -sf /dev/null /var/log/rundeck/rundeck.access.log &&\
-    ln -sf /dev/null /var/log/rundeck/rundeck.api.log &&\
-    ln -sf /dev/null /var/log/rundeck/rundeck.audit.log &&\
-    ln -sf /dev/null /var/log/rundeck/rundeck.executions.log &&\
-    ln -sf /dev/null /var/log/rundeck/rundeck.jobs.log &&\
-    ln -sf /dev/null /var/log/rundeck/rundeck.log &&\
-    ln -sf /dev/null /var/log/rundeck/rundeck.options.log &&\
+ENV RUNDECK_VERSION=2.6.9-1-GA
+RUN wget "http://dl.bintray.com/rundeck/rundeck-deb/rundeck-${RUNDECK_VERSION}.deb" && \
+    dpkg -i rundeck-${RUNDECK_VERSION}.deb && \
+    rm -f rundeck-${RUNDECK_VERSION}.deb && \
+    ln -sf /dev/null /var/log/rundeck/rundeck.access.log && \
+    ln -sf /dev/null /var/log/rundeck/rundeck.api.log && \
+    ln -sf /dev/null /var/log/rundeck/rundeck.audit.log && \
+    ln -sf /dev/null /var/log/rundeck/rundeck.executions.log && \
+    ln -sf /dev/null /var/log/rundeck/rundeck.jobs.log && \
+    ln -sf /dev/null /var/log/rundeck/rundeck.log && \
+    ln -sf /dev/null /var/log/rundeck/rundeck.options.log && \
     ln -sf /dev/null /var/log/rundeck/rundeck.storage.log
 
 # install rundeck plugins
 WORKDIR /var/lib/rundeck/libext
-RUN wget "https://github.com/rundeck-plugins/rundeck-ec2-nodes-plugin/releases/download/v1.5.2/rundeck-ec2-nodes-plugin-1.5.2.jar" &&\
-    wget "https://github.com/rundeck-plugins/rundeck-s3-log-plugin/releases/download/v1.0.3/rundeck-s3-log-plugin-1.0.3.jar" &&\
-    wget "https://github.com/higanworks/rundeck-slack-incoming-webhook-plugin/releases/download/v0.5.dev/rundeck-slack-incoming-webhook-plugin-0.5.jar"
-
-# install vagrant
-ENV VAGRANT_VERSION=1.8.1
-RUN wget "https://releases.hashicorp.com/vagrant/${VAGRANT_VERSION}/vagrant_${VAGRANT_VERSION}_x86_64.deb" &&\
-    dpkg -i vagrant_${VAGRANT_VERSION}_x86_64.deb &&\
-    rm -f vagrant_${VAGRANT_VERSION}_x86_64.deb &&\
-    vagrant plugin install vagrant-aws &&\
-    vagrant box add dummy "https://github.com/mitchellh/vagrant-aws/raw/master/dummy.box"
+RUN wget "https://github.com/rundeck-plugins/rundeck-ec2-nodes-plugin/releases/download/v1.5.2/rundeck-ec2-nodes-plugin-1.5.2.jar" && \
+    wget "https://github.com/rundeck-plugins/rundeck-s3-log-plugin/releases/download/v1.0.3/rundeck-s3-log-plugin-1.0.3.jar" && \
+    wget "https://github.com/higanworks/rundeck-slack-incoming-webhook-plugin/releases/download/v0.6.dev/rundeck-slack-incoming-webhook-plugin-0.6.jar"
 
 # install python libraries
-RUN pip install awscli==1.10.37 boto==2.40.0 boto3==1.3.1
+RUN pip install awscli==1.10.53 \
+                boto==2.42.0 \
+                boto3==1.3.1
 
 WORKDIR /var/lib/rundeck
 
